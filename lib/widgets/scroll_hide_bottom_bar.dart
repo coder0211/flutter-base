@@ -14,7 +14,7 @@ class ScrollHideBottomBar extends StatefulWidget {
     required this.bottomBar,
     this.shrinkWrap = false,
     this.child,
-  })  : assert(true),
+  })  : assert((child == null && children != null) || (child != null && children == null)),
         super(key: key);
 
   @override
