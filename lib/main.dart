@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:improve_base/base/page_base.dart';
+import 'package:improve_base/main.cubit.dart';
 import 'package:improve_base/theme/app_color.dart';
 import 'package:improve_base/utils/app_utils.dart';
 import 'package:improve_base/widgets/scroll_hide_bottom_bar.dart';
@@ -20,7 +22,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: BlocProvider<MainCubit>(
+        create: (context) => MainCubit(),
+        child: const MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
@@ -36,10 +41,13 @@ class MyHomePage extends PageBase {
 
 class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
   late TextEditingController tfController;
+  late MainCubit mainCubit;
   @override
   void initState() {
-    tfController = TextEditingController();
     super.initState();
+    tfController = TextEditingController();
+    mainCubit = context.read<MainCubit>();
+    mainCubit.init();
   }
 
   @override
@@ -70,19 +78,24 @@ class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
                   height: 100,
                   width: AppUtils.getScreenWidth(context),
                 ),
-                child: SizedBox(),
-                children: [
-                  for (int i = 0; i < 10; i++) ...{
-                    Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                        color: AppColors.black,
-                      )),
-                      height: 100,
-                      width: AppUtils.getScreenWidth(context),
-                    ),
-                  }
-                ],
+                child: BlocConsumer<MainCubit, MainState>(
+                    listener: (context, state) {},
+                    builder: (_, MainState state) {
+                      return ListView.builder(
+                        itemBuilder: (BuildContext context, int index) {
+                          final user = state.users[index];
+                          return Container(
+                            height: 100,
+                            width: AppUtils.getScreenWidth(context),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                            ),
+                            child: Text('${user.name}--${user.description}'),
+                          );
+                        },
+                        itemCount: state.users.length,
+                      );
+                    }),
               ),
             ),
           ],
@@ -90,8 +103,9 @@ class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          showLoading(context);
-          await Future.delayed(const Duration(seconds: 1)).whenComplete(() => hideLoading(context));
+          mainCubit.change();
+          // showLoading(context);
+          // await Future.delayed(const Duration(seconds: 1)).whenComplete(() => hideLoading(context));
         },
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:improve_base/utils/debouncer.dart';
+import 'package:improve_base/widgets/null_widget.dart';
 
 import 'slide_section.dart';
 
@@ -36,6 +37,7 @@ class _ScrollHideBottomBarState extends State<ScrollHideBottomBar> {
               shrinkWrap: widget.shrinkWrap,
               children: widget.children ?? [],
             ),
+          if (widget.child != null) widget.child ?? nullWidget,
           ValueListenableBuilder<bool>(
             builder: (_, isShow, __) {
               return SlideSection(
