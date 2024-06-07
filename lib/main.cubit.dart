@@ -9,10 +9,10 @@ class MainState extends Equatable {
     this.users = const [],
   });
 
-  @override
-  String toString() {
-    return '${users.length}';
-  }
+  // @override
+  // String toString() {
+  //   return '${users.length}';
+  // }
 
   @override
   List<Object?> get props => [users.hashCode];
@@ -31,7 +31,7 @@ class MainCubit extends Cubit<MainState> {
 
   void change() {
     state.users[1].description = DateTime.now().microsecondsSinceEpoch.toString();
-    // temp.add(User(name: 'asdf', description: DateTime.now().microsecondsSinceEpoch.toString()));
+    // state.users.add(User(name: 'asdf', description: DateTime.now().microsecondsSinceEpoch.toString()));
     emit(MainState(users: state.users.toList()));
   }
 }
