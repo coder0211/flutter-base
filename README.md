@@ -14,4 +14,4 @@
 - [x] LoadListCubit [rm]
 - [x] SafeEmit [convert to class extends Cubit]
 - [x] ShowBottomSheet [convert to custom widget]
-- [ ] BottomSheetState [convert to custom widget]
+- [x] BottomSheetState [convert to custom widget]
