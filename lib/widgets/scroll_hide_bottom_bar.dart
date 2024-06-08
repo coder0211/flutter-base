@@ -55,7 +55,7 @@ class _ScrollHideBottomBarState extends State<ScrollHideBottomBar> {
   bool _onNotification(ScrollNotification notification) {
     if ([AxisDirection.down, AxisDirection.up].contains(notification.metrics.axisDirection)) {
       isShowBottomBar.value = false;
-      Debouncer(milliseconds: 1000).run(() => isShowBottomBar.value = true);
+      Debounce(milliseconds: 1000).run(() => isShowBottomBar.value = true);
     } else {
       isShowBottomBar.value = true;
     }

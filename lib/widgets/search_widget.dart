@@ -36,7 +36,7 @@ class SearchWidget extends StatelessWidget {
   void onChanged(String value) {
     if (!searchRule(value)) return;
 
-    Debouncer(milliseconds: timeTypingDelay).run(() {
+    Debounce(milliseconds: timeTypingDelay).run(() {
       onSearch.call(value);
     });
   }
