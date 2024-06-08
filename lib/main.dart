@@ -14,7 +14,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -74,28 +73,69 @@ class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
             Expanded(
               child: ScrollHideBottomBar(
                 bottomBar: Container(
-                  color: AppColors.primary,
+                  color: AppColors.black,
                   height: 100,
                   width: AppUtils.getScreenWidth(context),
+                  child: Row(
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            mainCubit.updateDescription();
+                          },
+                          child: const Text('Update description'))
+                    ],
+                  ),
                 ),
-                child: BlocConsumer<MainCubit, MainState>(
-                    listener: (context, state) {},
-                    builder: (_, MainState state) {
-                      return ListView.builder(
-                        itemBuilder: (BuildContext context, int index) {
-                          final user = state.users[index];
-                          return Container(
-                            height: 100,
-                            width: AppUtils.getScreenWidth(context),
-                            decoration: BoxDecoration(
+                child: BlocBuilder<MainCubit, MainState>(builder: (_, MainState state) {
+                  return ListView.builder(
+                    itemBuilder: (BuildContext context, int index) {
+                      final user = state.users[index];
+                      return GestureDetector(
+                        onTap: () => mainCubit.onItemPressed(user.id),
+                        child: Container(
+                          width: AppUtils.getScreenWidth(context),
+                          padding: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
                               border: Border.all(),
-                            ),
-                            child: Text('${user.name}--${user.description}'),
-                          );
-                        },
-                        itemCount: state.users.length,
+                              color: state.userIdSelected == user.id ? AppColors.primary : AppColors.white),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Name: ${user.name}\nDescription: ${user.description}',
+                              ),
+                              const Divider(
+                                color: Color.fromARGB(255, 238, 150, 150),
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (BuildContext context, int index) {
+                                  final item = user.todoList.elementAt(index);
+                                  return Row(
+                                    children: [
+                                      Checkbox(
+                                          value: item.isCompleted,
+                                          onChanged: (v) {
+                                            mainCubit.onTodoPressed(user.id, item.id);
+                                          }),
+                                      const SizedBox(width: 10),
+                                      Expanded(child: Text(item.content))
+                                    ],
+                                  );
+                                },
+                                itemCount: user.todoList.length,
+                              )
+                            ],
+                          ),
+                        ),
                       );
-                    }),
+                    },
+                    itemCount: state.users.length,
+                  );
+                }),
               ),
             ),
           ],
@@ -103,9 +143,8 @@ class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          mainCubit.change();
-          // showLoading(context);
-          // await Future.delayed(const Duration(seconds: 1)).whenComplete(() => hideLoading(context));
+          showLoading(context);
+          await Future.delayed(const Duration(seconds: 1)).whenComplete(() => hideLoading(context));
         },
       ),
     );

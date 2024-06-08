@@ -1,37 +1,59 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:improve_base/equatable/equatable.dart';
 import 'package:improve_base/model/user.dart';
+import 'package:improve_base/widgets/custom_cubit.dart';
 
 class MainState extends Equatable {
   final List<User> users;
+  final String userIdSelected;
 
-  const MainState({
+  MainState({
     this.users = const [],
+    this.userIdSelected = '',
   });
 
-  // @override
-  // String toString() {
-  //   return '${users.length}';
-  // }
+  @override
+  List<Object?> get props => [users, userIdSelected];
 
   @override
-  List<Object?> get props => [users.toList().hashCode];
+  bool get isForeUpdateCollection => true;
+
+  MainState copyWith({List<User>? users, String? userIdSelected}) => MainState(
+        users: users ?? this.users,
+        userIdSelected: userIdSelected ?? this.userIdSelected,
+      );
 }
 
-class MainCubit extends Cubit<MainState> {
-  MainCubit() : super(const MainState());
+class MainCubit extends CustomCubit<MainState> {
+  MainCubit() : super(MainState());
 
   void init() {
-    emit(MainState(users: [
-      User(name: 'Hello 1', description: '1234'),
-      User(name: 'Hello 2', description: '12345'),
-      User(name: 'Hello 3', description: '123456'),
-    ]));
+    final users = User.genList();
+    emit(MainState(users: users, userIdSelected: users.first.id));
   }
 
-  void change() {
-    state.users[1].description = DateTime.now().microsecondsSinceEpoch.toString();
-    // state.users.add(User(name: 'asdf', description: DateTime.now().microsecondsSinceEpoch.toString()));
-    emit(MainState(users: state.users));
+  onItemPressed(String id) {
+    emit(state.copyWith(userIdSelected: id));
+  }
+
+  void updateDescription() {
+    for (var element in state.users) {
+      if (element.id == state.userIdSelected) {
+        element.description += DateTime.now().millisecondsSinceEpoch.toString();
+        emit(state.copyWith(users: state.users));
+      }
+    }
+  }
+
+  void onTodoPressed(String userId, String todoId) {
+    for (var element in state.users) {
+      if (element.id == userId) {
+        for (var todo in element.todoList) {
+          if (todo.id == todoId) {
+            todo.isCompleted = !todo.isCompleted;
+            emit(state.copyWith(users: state.users));
+          }
+        }
+      }
+    }
   }
 }
