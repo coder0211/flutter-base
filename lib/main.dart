@@ -109,25 +109,31 @@ class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
                               const Divider(
                                 color: Color.fromARGB(255, 238, 150, 150),
                               ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (BuildContext context, int index) {
-                                  final item = user.todoList.elementAt(index);
-                                  return Row(
-                                    children: [
-                                      Checkbox(
-                                          value: item.isCompleted,
-                                          onChanged: (v) {
-                                            mainCubit.onTodoPressed(user.id, item.id);
-                                          }),
-                                      const SizedBox(width: 10),
-                                      Expanded(child: Text(item.content))
-                                    ],
-                                  );
-                                },
-                                itemCount: user.todoList.length,
-                              )
+                              if (user.todoList?.isLoading == true)
+                                const SizedBox(
+                                  height: 100,
+                                  child: Center(child: CircularProgressIndicator()),
+                                )
+                              else
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (BuildContext context, int index) {
+                                    final item = user.todoList?.ls.elementAt(index);
+                                    return Row(
+                                      children: [
+                                        Checkbox(
+                                            value: item?.isCompleted,
+                                            onChanged: (v) {
+                                              mainCubit.onTodoPressed(user.id, item?.id ?? '');
+                                            }),
+                                        const SizedBox(width: 10),
+                                        Expanded(child: Text(item?.content ?? ''))
+                                      ],
+                                    );
+                                  },
+                                  itemCount: user.todoList?.ls.length,
+                                )
                             ],
                           ),
                         ),
@@ -143,8 +149,7 @@ class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          showLoading(context);
-          await Future.delayed(const Duration(seconds: 1)).whenComplete(() => hideLoading(context));
+          mainCubit.testLoadingTodoList();
         },
       ),
     );

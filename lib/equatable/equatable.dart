@@ -5,7 +5,7 @@ abstract class Equatable {
 
   List<Object?> get props;
 
-  bool get isForeUpdateCollection => false;
+  bool get isForeUpdate => false;
 
   @override
   bool operator ==(Object other) {
@@ -13,7 +13,7 @@ abstract class Equatable {
   }
 
   bool _compare(Object other) {
-    if (isForeUpdateCollection) return false;
+    if (isForeUpdate) return false;
     if (!isEquatable(other)) return false;
     if (identical(this, other)) return true;
     if (runtimeType == other.runtimeType && equals(props, (other as Equatable).props)) return true;

@@ -15,7 +15,7 @@ class MainState extends Equatable {
   List<Object?> get props => [users, userIdSelected];
 
   @override
-  bool get isForeUpdateCollection => true;
+  bool get isForeUpdate => true;
 
   MainState copyWith({List<User>? users, String? userIdSelected}) => MainState(
         users: users ?? this.users,
@@ -31,7 +31,7 @@ class MainCubit extends CustomCubit<MainState> {
     emit(MainState(users: users, userIdSelected: users.first.id));
   }
 
-  onItemPressed(String id) {
+  void onItemPressed(String id) {
     emit(state.copyWith(userIdSelected: id));
   }
 
@@ -47,12 +47,25 @@ class MainCubit extends CustomCubit<MainState> {
   void onTodoPressed(String userId, String todoId) {
     for (var element in state.users) {
       if (element.id == userId) {
-        for (var todo in element.todoList) {
+        for (var todo in element.todoList?.ls ?? []) {
           if (todo.id == todoId) {
             todo.isCompleted = !todo.isCompleted;
             emit(state.copyWith(users: state.users));
           }
         }
+      }
+    }
+  }
+
+  void testLoadingTodoList() {
+    for (var element in state.users) {
+      if (element.id == state.userIdSelected) {
+        element.todoList?.isLoading = true;
+        emit(state.copyWith(users: state.users));
+        Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+          element.todoList?.isLoading = false;
+          emit(state.copyWith(users: state.users));
+        });
       }
     }
   }
