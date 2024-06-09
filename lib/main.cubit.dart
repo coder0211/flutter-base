@@ -15,7 +15,7 @@ class MainState extends Equatable {
   List<Object?> get props => [users, userIdSelected];
 
   @override
-  bool get isForeUpdate => true;
+  bool get isForeUpdateCollection => true;
 
   MainState copyWith({List<User>? users, String? userIdSelected}) => MainState(
         users: users ?? this.users,
