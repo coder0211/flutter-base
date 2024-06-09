@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:improve_base/utils/debouncer.dart';
+import 'package:improve_base/utils/debounce.dart';
 import 'package:improve_base/widgets/null_widget.dart';
 
 import 'slide_section.dart';

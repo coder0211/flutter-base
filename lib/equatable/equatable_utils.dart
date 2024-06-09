@@ -13,7 +13,11 @@ bool equals(
   if (length != nextProps.length) return false;
 
   for (var i = 0; i < length; i++) {
-    if (!_compare(currentProps[i], nextProps[i])) return false;
+    if (!_compare(
+      currentProps[i],
+      nextProps[i],
+      isForeUpdateCollection: isForeUpdateCollection,
+    )) return false;
   }
   return true;
 }

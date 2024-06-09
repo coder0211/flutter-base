@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:improve_base/utils/debouncer.dart';
+import 'package:improve_base/utils/debounce.dart';
 
 class SearchWidget extends StatelessWidget {
   final TextEditingController tfController;
