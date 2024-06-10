@@ -161,7 +161,6 @@ class ListEquality<E> implements Equality<List<E>> {
   const ListEquality([Equality<E> elementEquality = const DefaultEquality<Never>()])
       : _elementEquality = elementEquality;
 
-  // TODO: improve this to listeners list changes
   @override
   bool equals(List<E>? list1, List<E>? list2) {
     if (identical(list1, list2)) return true;
