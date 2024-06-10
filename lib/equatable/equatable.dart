@@ -1,3 +1,4 @@
+// Copyright (c) Equatable 2.0.5
 import 'equatable_utils.dart';
 
 abstract class Equatable {
