@@ -1,14 +1,27 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:improve_base/base/page_base.dart';
 import 'package:improve_base/main.cubit.dart';
 import 'package:improve_base/theme/app_color.dart';
+import 'package:improve_base/utils/app_error.dart';
 import 'package:improve_base/utils/app_utils.dart';
 import 'package:improve_base/widgets/scroll_hide_bottom_bar.dart';
 import 'package:improve_base/widgets/search_widget.dart';
 
 void main() {
-  runApp(const MyApp());
+  runZonedGuarded(() {
+    runApp(const MyApp());
+  }, (dynamic error, StackTrace stackTrace) {
+    _handleAppError(error, stackTrace);
+  });
+}
+
+void _handleAppError(error, StackTrace stackTrace) {
+  if (error is AppError) {
+    showAboutDialog(context: error.context, children: [Text(error.content ?? '')]);
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -69,6 +82,7 @@ class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
               onSearch: onSearch,
               searchRule: searchRule,
               hintText: 'Search....',
+              onClearSearch: () {},
             ),
             Expanded(
               child: ScrollHideBottomBar(
@@ -149,6 +163,7 @@ class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          AppError(AppErrorEnum.someThingWhenWrong).log(context);
           mainCubit.testLoadingTodoList();
         },
       ),

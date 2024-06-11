@@ -4,6 +4,7 @@ import 'package:improve_base/utils/debounce.dart';
 class SearchWidget extends StatelessWidget {
   final TextEditingController tfController;
   final Function(String q) onSearch;
+  final VoidCallback onClearSearch;
   final String? hintText;
   final int timeTypingDelay;
 
@@ -19,6 +20,7 @@ class SearchWidget extends StatelessWidget {
     required this.searchRule,
     this.hintText = '',
     this.timeTypingDelay = 1000,
+    required this.onClearSearch,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,10 @@ class SearchWidget extends StatelessWidget {
   }
 
   void onChanged(String value) {
+    if (value.isEmpty) {
+      onClearSearch.call();
+      return;
+    }
     if (!searchRule(value)) return;
 
     Debounce(milliseconds: timeTypingDelay).run(() {
