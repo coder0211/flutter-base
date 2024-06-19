@@ -7,6 +7,7 @@ import 'package:improve_base/main.cubit.dart';
 import 'package:improve_base/theme/app_color.dart';
 import 'package:improve_base/utils/app_error.dart';
 import 'package:improve_base/utils/app_utils.dart';
+import 'package:improve_base/widgets/counter.dart';
 import 'package:improve_base/widgets/scroll_hide_bottom_bar.dart';
 import 'package:improve_base/widgets/search_widget.dart';
 
@@ -54,11 +55,16 @@ class MyHomePage extends PageBase {
 class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
   late TextEditingController tfController;
   late MainCubit mainCubit;
+  final Controller<int> _controller = Controller<int>(0);
+
   @override
   void initState() {
     super.initState();
     tfController = TextEditingController();
     mainCubit = context.read<MainCubit>();
+    _controller.addListener(() {
+      print(_controller.value);
+    });
     mainCubit.init();
   }
 
@@ -83,6 +89,12 @@ class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
               searchRule: searchRule,
               hintText: 'Search....',
               onClearSearch: () {},
+            ),
+            ControllerWidget<int>(
+              builder: (value) {
+                return Text(value.toString());
+              },
+              controller: _controller,
             ),
             Expanded(
               child: ScrollHideBottomBar(
@@ -163,8 +175,11 @@ class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          AppError(AppErrorEnum.someThingWhenWrong).log(context);
-          mainCubit.testLoadingTodoList();
+          // print(_controller);
+          _controller.value++;
+
+          // AppError(AppErrorEnum.someThingWhenWrong).log(context);
+          // mainCubit.testLoadingTodoList();
         },
       ),
     );
