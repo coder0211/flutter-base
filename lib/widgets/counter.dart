@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Controller<T> extends ValueNotifier<T> {
-  Controller(super.value);
+  Controller({required T initValue}) : super(initValue);
 }
 
 class ControllerWidget<T> extends StatelessWidget {

@@ -55,7 +55,7 @@ class MyHomePage extends PageBase {
 class _MyHomePageState extends PageBaseState<MyHomePage> with PageLoadingMixin {
   late TextEditingController tfController;
   late MainCubit mainCubit;
-  final Controller<int> _controller = Controller<int>(0);
+  final Controller<int> _controller = Controller<int>(initValue: 0);
 
   @override
   void initState() {
