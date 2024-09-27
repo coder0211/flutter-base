@@ -7,7 +7,7 @@ import 'package:improve_base/main.cubit.dart';
 import 'package:improve_base/theme/app_color.dart';
 import 'package:improve_base/utils/app_error.dart';
 import 'package:improve_base/utils/app_utils.dart';
-import 'package:improve_base/widgets/counter.dart';
+import 'package:improve_base/widgets/controller_widget.dart';
 import 'package:improve_base/widgets/scroll_hide_bottom_bar.dart';
 import 'package:improve_base/widgets/search_widget.dart';
 
